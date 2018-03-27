@@ -171,7 +171,7 @@ def L_layer_model(X, Y, layer_dims, learning_rate, epochs, print_cost, batch_siz
 
 	
 #main code starts here
-#Load data is a function that loads data, dummy valuea are loaded
+#Load data is a function that loads data, dummy values are loaded
 train_x_orig, train_y, test_x_orig, test_y = load_data()
 
 #Normalizing
