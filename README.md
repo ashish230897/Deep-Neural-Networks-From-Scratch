@@ -5,4 +5,3 @@ the libraries.
 Backward_pass_utils contains all the necessary code for back propagations.
 Forward_pass_utils contains all the necessary code for forward propagations.
 main.py is the code that is to be run.
-
