@@ -38,7 +38,7 @@ The files *forward_pass_utils.py*, *backward_pass_utils.py* and *utils.py* conta
 In the file *main.py*, the list **layer_dims** can be altered, although the first parameter(12288) is set considering the images to be of size (64x64) and the last parameter is 1 since it is a binary classification problem. The number of hidden layers and the number of hidden units can be tweaked.  
 The parameters are saved after each epoch. To load a model from last saved checkpoint, pass the load_pretrained parameter as True else pass it as False.  
                                                              
-You can also view the provided *jupyter notebook* file with a notebook viewer to follow the code step by step on a notebook.  
+**You can also view the provided *jupyter notebook* file with a notebook viewer to follow the code step by step on a notebook.**  
 
 
 ## Acknowledgements
