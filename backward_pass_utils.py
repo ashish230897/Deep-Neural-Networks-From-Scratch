@@ -1,45 +1,58 @@
 import numpy as np
-import os
-import matplotlib.pyplot as plt
-import math
-
-def relu_backward(dA, activation_cache):
-	##Since dz = da * g'(z)
-	Z = activation_cache["Z"]
-	
-	return np.multiply(dA, np.int64(Z > 0))  
 
 
-def linear_activation_backward(dA, cache, activation, regularization, lambd):
-	#cache is of a particular layer, this function is run for every layer to calculate dA_prev for preceding layer
+def relu_backward(da, activation_cache):
+	# Since dz = da * g'(z)
+	z = activation_cache["Z"]
+
+	dz = np.multiply(da, np.int64(z > 0))
+
+	assert (z.shape == dz.shape)
+	return dz
+
+
+def sigmoid_backward(da, activation_cache):
+	# Since dz = da * g'(z)
+	z = activation_cache["Z"]
+	a = 1 / (1 + np.exp(-1 * z))
+
+	dz = np.multiply(da, a * (1 - a))
+
+	assert (z.shape == dz.shape)
+	return dz
+
+
+def linear_activation_backward(da, cache, activation, lambd):
+	# cache is of a particular layer, this function is run for every layer to calculate dA_prev for preceding layer
 	linear_cache, activation_cache = cache
 
-	
-	##To calculate dZ we need dA
-	dZ = relu_backward(dA, activation_cache)
-	
-	##dZ of current layer is necessary to calculate every other gradient
-	dA_prev, dW, db = linear_backward(dZ, linear_cache, regularization, lambd)
+	# To calculate dz we need da
+	# dz of current layer is necessary to calculate every other gradient
+	if activation == "relu":
+		dz = relu_backward(da, activation_cache)
+		da_prev, dw, db = linear_backward(dz, linear_cache, lambd)
 
-	##dA_prev is gradient of previous layer's output that is A_prev	
-	return dA_prev, dW, db
+	if activation == "sigmoid":
+		dz = sigmoid_backward(da, activation_cache)
+		da_prev, dw, db = linear_backward(dz, linear_cache, lambd)
+
+	# da_prev is gradient of previous layer's output that is a_prev
+	return da_prev, dw, db
 
 
-def linear_backward(dZ, cache, regularization, lambd):
-	##As explained earlier, we need dz of any layer before calculating other gradients of that layer
-	##dz is caculated from dA , which is then used to calculate dA_prev	
-	##Cache is linear cache that contains previous layer A and w, b of current layer	
-	
-	A_prev, W, b = cache
-	m = A_prev.shape[1]
+def linear_backward(dz, cache, lambd):
+    # We need dz of any layer before calculating other gradients of that layer
+    # dz is caculated from dA , which is then used to calculate dA_prev
 
-	dW = (1/m)*(np.dot(dZ,A_prev.T)) + (lambd/m)*W
-	db = (1/m)*(np.sum(dZ, axis = 1, keepdims = True))
-	dA_prev = np.dot(W.T,dZ)
-	
-	assert (dA_prev.shape == A_prev.shape)
-	assert (dW.shape == W.shape)
-	assert (db.shape == b.shape)
+    a_prev, w, b = cache
+    m = a_prev.shape[1]
 
-	return dA_prev, dW, db
+    dw = (1/m)*(np.dot(dz,a_prev.T)) + (lambd/m)*w
+    db = (1/m)*(np.sum(dz, axis = 1, keepdims = True))
+    da_prev = np.dot(w.T,dz)
 
+    assert (da_prev.shape == a_prev.shape)
+    assert (dw.shape == w.shape)
+    assert (db.shape == b.shape)
+
+    return da_prev, dw, db
