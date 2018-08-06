@@ -20,7 +20,8 @@ pip install numpy
 pip install matplotlib  
 pip install Pillow
 ```  
-The data required to train the model has to be kept in the Data directory.  
+Create a folder named 'Data'. The data required to train the model has to be kept in the Data directory.  
+Inside the Data folder, create two new folders named 'Train' and 'Test'.
 The Train folder there should contain the training images. The images can be found [here](https://www.kaggle.com/c/dogs-vs-cats)
                                                                    
                                                    
